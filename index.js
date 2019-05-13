@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const dotenv = require('dotenv');
+const now = require('moment');
 
 dotenv.config();
 
@@ -30,17 +31,21 @@ async function run() {
   await page.waitForSelector(STATUS_SELECTOR);
 
   const element = await page.$(STATUS_SELECTOR);
-  const text = await page.evaluate(element => element.textContent, element);
+  const status = await page.evaluate(element => element.textContent, element);
+
+  let time = now().format('DD MMMM, YYYY');
+
+  let message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'`;
 
   client.messages
     .create({
-       body: text,
+       body: message,
        from: '+12172882029',
        to: '+12178191201'
      })
     .then(message => console.log(message.sid));
 
-  console.log(text);
+  console.log(message);
 
   browser.close();
 }
