@@ -1,0 +1,17 @@
+{
+  "name": "h1b-tracker",
+  "version": "1.0.0",
+  "description": "A H1B Tracking CRON job",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Yash Agrawal",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "puppeteer": "^1.15.0",
+    "twilio": "^3.30.3"
+  }
+}
