@@ -2,6 +2,8 @@ const puppeteer = require('puppeteer');
 const dotenv = require('dotenv');
 const now = require('moment');
 
+const actions = require('./actions');
+
 dotenv.config();
 
 const client = require('twilio')(
@@ -20,22 +22,31 @@ async function run() {
   const CHECK_STATUS_BUTTON_SELECTOR = `#landingForm > div > div.container > div > div.case-status-info3 > fieldset > div:nth-child(2) > div.filed-box.col-lg-6 > input`;
   const STATUS_SELECTOR = `body > div.main-content-sec.pb40 > form > div > div.container > div > div > div.col-lg-12.appointment-sec.center > div.rows.text-center > h1`;
 
-  await page.goto(URL);
-  await page.waitForNavigation();
+  let message = '';
 
-  await page.click(RECEIPT_NUMBER_SELECTOR);
-  await page.keyboard.type(RECEIPT_NUMBER);
+  try {
+    await page.goto(URL);
+    await page.waitForNavigation();
 
-  await page.click(CHECK_STATUS_BUTTON_SELECTOR);
+    await page.click(RECEIPT_NUMBER_SELECTOR);
+    await page.keyboard.type(RECEIPT_NUMBER);
 
-  await page.waitForSelector(STATUS_SELECTOR);
+    await page.click(CHECK_STATUS_BUTTON_SELECTOR);
 
-  const element = await page.$(STATUS_SELECTOR);
-  const status = await page.evaluate(element => element.textContent, element);
+    await page.waitForSelector(STATUS_SELECTOR);
 
-  let time = now().format('DD MMMM, YYYY');
+    const element = await page.$(STATUS_SELECTOR);
+    const status = await page.evaluate(element => element.textContent, element);
 
-  let message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'`;
+    let time = now().format('DD MMMM, YYYY');
+
+    message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'. ${actions.action[status]}`;
+
+    browser.close();
+
+  } catch(err) {
+    message = `❌ : ${err}`;
+  }
 
   client.messages
     .create({
@@ -46,8 +57,6 @@ async function run() {
     .then(message => console.log(message.sid));
 
   console.log(message);
-
-  browser.close();
 }
 
 run();
