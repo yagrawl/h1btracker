@@ -9,9 +9,7 @@ const client = require('twilio')(
                );
 
 async function run() {
-  const browser = await puppeteer.launch({
-    headless: false
-  });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   const URL = `https://egov.uscis.gov/casestatus/`;
