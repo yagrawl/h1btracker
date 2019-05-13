@@ -47,7 +47,8 @@ async function run() {
     daysSinceLottery = now.duration(dayToday.diff(dayLottery)).asDays();
     daysSinceReceipt = now.duration(dayToday.diff(dayReceipt)).asDays();
 
-    message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'. ${actions.action[status]}
+    message = `${actions.action[status]}
+The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'.
 
 ⏰ since lottery : ${daysSinceLottery} days
 ⏰ since receipt : ${daysSinceReceipt} days`;
