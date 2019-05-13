@@ -40,7 +40,17 @@ async function run() {
 
     let time = now().format('DD MMMM, YYYY');
 
-    message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'. ${actions.action[status]}`;
+    let dayLottery = now('11 April, 2019', 'DD MMMM, YYYY');
+    let dayReceipt = now('24 April, 2019', 'DD MMMM, YYYY');
+    let dayToday = now(time, 'DD MMMM, YYYY');
+
+    daysSinceLottery = now.duration(dayToday.diff(dayLottery)).asDays();
+    daysSinceReceipt = now.duration(dayToday.diff(dayReceipt)).asDays();
+
+    message = `The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'. ${actions.action[status]}
+
+⏰ since lottery : ${daysSinceLottery} days
+⏰ since receipt : ${daysSinceReceipt} days`;
 
     browser.close();
 
