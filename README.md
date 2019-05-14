@@ -40,9 +40,9 @@ CRON job.
 
 This will send a message like
 ```
-:hourglass_flowing_sand: #ACTION.
-The status of Receipt '#YOUR_RECEIPT_NUMBER' as of '#DATE' [:sunny:] is '#STATUS'.
+⏳ Hang tight.
+The status of Receipt #RECEIPT_NUMBER as of 13 May, 2019 [🌙] is 'Case Was Received'.
 
-:alarm_clock: since lottery : '#X' days
-:alarm_clock: since receipt : '#Y' days
+⏰ since lottery : 32 days
+⏰ since receipt : 19 days
 ```
