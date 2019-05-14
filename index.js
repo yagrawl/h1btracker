@@ -16,7 +16,6 @@ async function run() {
   const page = await browser.newPage();
 
   const URL = `https://egov.uscis.gov/casestatus/`;
-  const RECEIPT_NUMBER = `WAC1917951037`;
 
   const RECEIPT_NUMBER_SELECTOR = `#receipt_number`;
   const CHECK_STATUS_BUTTON_SELECTOR = `#landingForm > div > div.container > div > div.case-status-info3 > fieldset > div:nth-child(2) > div.filed-box.col-lg-6 > input`;
@@ -29,7 +28,7 @@ async function run() {
     await page.waitForNavigation();
 
     await page.click(RECEIPT_NUMBER_SELECTOR);
-    await page.keyboard.type(RECEIPT_NUMBER);
+    await page.keyboard.type(process.env.RECEIPT_NUMBER);
 
     await page.click(CHECK_STATUS_BUTTON_SELECTOR);
 
@@ -48,7 +47,7 @@ async function run() {
     daysSinceReceipt = now.duration(dayToday.diff(dayReceipt)).asDays();
 
     message = `${actions.action[status]}
-The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'.
+The status of Receipt ${process.env.RECEIPT_NUMBER} as of ${time} is '${status}'.
 
 ⏰ since lottery : ${daysSinceLottery} days
 ⏰ since receipt : ${daysSinceReceipt} days`;
@@ -62,8 +61,8 @@ The status of Receipt ${RECEIPT_NUMBER} as of ${time} is '${status}'.
   client.messages
     .create({
        body: message,
-       from: '+12172882029',
-       to: '+12178191201'
+       from: process.env.TWILIO_NUMBER,
+       to: process.env.MY_NUMBER
      })
     .then(message => console.log(message.sid));
 
