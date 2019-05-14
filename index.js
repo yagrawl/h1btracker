@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const dotenv = require('dotenv');
 const now = require('moment');
+const moment = require('moment-timezone');
 
 const actions = require('./actions');
 
@@ -37,17 +38,20 @@ async function run() {
     const element = await page.$(STATUS_SELECTOR);
     const status = await page.evaluate(element => element.textContent, element);
 
-    let time = now().format('DD MMMM, YYYY');
+    let day = moment().tz("America/Los_Angeles").format('DD MMMM, YYYY');
+    let time = parseInt(moment().tz("America/Los_Angeles").format('HH'));
 
-    let dayLottery = now('11 April, 2019', 'DD MMMM, YYYY');
-    let dayReceipt = now('24 April, 2019', 'DD MMMM, YYYY');
-    let dayToday = now(time, 'DD MMMM, YYYY');
+    let timeOfDay = (time > 12) ? '🌙' : '☀️';
+
+    let dayLottery = moment('11 April, 2019', 'DD MMMM, YYYY').tz("America/Los_Angeles");
+    let dayReceipt = moment('24 April, 2019', 'DD MMMM, YYYY').tz("America/Los_Angeles");
+    let dayToday = now(day, 'DD MMMM, YYYY');
 
     daysSinceLottery = now.duration(dayToday.diff(dayLottery)).asDays();
     daysSinceReceipt = now.duration(dayToday.diff(dayReceipt)).asDays();
 
     message = `${actions.action[status]}
-The status of Receipt ${process.env.RECEIPT_NUMBER} as of ${time} is '${status}'.
+The status of Receipt ${process.env.RECEIPT_NUMBER} as of ${day} [${timeOfDay}] is '${status}'.
 
 ⏰ since lottery : ${daysSinceLottery} days
 ⏰ since receipt : ${daysSinceReceipt} days`;
