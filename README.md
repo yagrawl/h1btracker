@@ -34,7 +34,7 @@ MY_NUMBER={enter your phone number}
 To host a CRON job use a service like [Render](https://render.com/).
 
 This is designed to run twice in a day so in the CRON job schedule field
-enter `0 16/12 * * *` which runs the program twice every day, once at 9 AM and
+enter `0 4,16 * * *` which runs the program twice every day, once at 9 AM and
 then at 9 PM PST. Don't forget to add the environment variables in the render
 CRON job.
 
